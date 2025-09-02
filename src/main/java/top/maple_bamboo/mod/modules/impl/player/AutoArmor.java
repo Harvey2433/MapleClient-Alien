@@ -40,6 +40,7 @@ public class AutoArmor extends Module {
 	}
 
 	private int tickDelay = 0;
+
 	@Override
 	public void onUpdate() {
 		if (mc.currentScreen != null && !(mc.currentScreen instanceof ChatScreen) && !(mc.currentScreen instanceof InventoryScreen) && !(mc.currentScreen instanceof ClickGuiScreen)) {
@@ -81,13 +82,18 @@ public class AutoArmor extends Module {
 					}
 				}
 				if (autoElytra.getValue() && (ElytraFly.INSTANCE.isOn()) && e.getKey() == EquipmentSlot.CHEST) {
-					if (!mc.player.getInventory().getStack(38).isEmpty() && mc.player.getInventory().getStack(38).getItem() instanceof ElytraItem && ElytraItem.isUsable(mc.player.getInventory().getStack(38))) {
+					// 移除耐久度检查，只检查是否为鞘翅
+					if (!mc.player.getInventory().getStack(38).isEmpty() &&
+							mc.player.getInventory().getStack(38).getItem() instanceof ElytraItem) {
 						continue;
 					}
-					if (e.getValue()[2] != -1 && !mc.player.getInventory().getStack(e.getValue()[2]).isEmpty() && mc.player.getInventory().getStack(e.getValue()[2]).getItem() instanceof ElytraItem && ElytraItem.isUsable(mc.player.getInventory().getStack(e.getValue()[2]))) {
+					if (e.getValue()[2] != -1 &&
+							!mc.player.getInventory().getStack(e.getValue()[2]).isEmpty() &&
+							mc.player.getInventory().getStack(e.getValue()[2]).getItem() instanceof ElytraItem) {
 						continue;
 					}
-					if (!mc.player.getInventory().getStack(s).isEmpty() && mc.player.getInventory().getStack(s).getItem() instanceof ElytraItem && ElytraItem.isUsable(mc.player.getInventory().getStack(s))) {
+					if (!mc.player.getInventory().getStack(s).isEmpty() &&
+							mc.player.getInventory().getStack(s).getItem() instanceof ElytraItem) {
 						e.getValue()[2] = s;
 					}
 					continue;
@@ -106,10 +112,6 @@ public class AutoArmor extends Module {
 		for (Map.Entry<EquipmentSlot, int[]> equipmentSlotEntry : armorMap.entrySet()) {
 			if (equipmentSlotEntry.getValue()[2] != -1) {
 				if (equipmentSlotEntry.getValue()[1] == -1 && equipmentSlotEntry.getValue()[2] < 9) {
-/*					if (equipmentSlotEntry.getValue()[2] != mc.player.getInventory().selectedSlot) {
-						mc.player.getInventory().selectedSlot = equipmentSlotEntry.getValue()[2];
-						mc.getNetworkHandler().sendPacket(new UpdateSelectedSlotC2SPacket(equipmentSlotEntry.getValue()[2]));
-					}*/
 					mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, 36 + equipmentSlotEntry.getValue()[2], 1, SlotActionType.QUICK_MOVE, mc.player);
 					EntityUtil.syncInventory();
 				} else if (mc.player.playerScreenHandler == mc.player.currentScreenHandler) {
@@ -125,17 +127,17 @@ public class AutoArmor extends Module {
 			}
 		}
 	}
+
 	private int getProtection(ItemStack is) {
 		if (is.getItem() instanceof ArmorItem || is.getItem() == Items.ELYTRA) {
 			int prot = 0;
 
 			if (is.getItem() instanceof ElytraItem) {
-				if (!ElytraItem.isUsable(is))
-					return 0;
+				// 移除鞘翅耐久度检查
 				prot = 1;
 			}
 			if (is.hasEnchantments()) {
-				for (Map.Entry<Enchantment, Integer> e: EnchantmentHelper.get(is).entrySet()) {
+				for (Map.Entry<Enchantment, Integer> e : EnchantmentHelper.get(is).entrySet()) {
 					if (e.getKey() instanceof ProtectionEnchantment)
 						prot += e.getValue();
 				}
