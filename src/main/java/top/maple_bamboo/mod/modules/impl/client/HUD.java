@@ -45,7 +45,7 @@ public class HUD extends Module {
     public final BooleanSetting brand = add(new BooleanSetting("Brand", false));
     public final BooleanSetting potions = add(new BooleanSetting("Potions", true));
     public final BooleanSetting coords = add(new BooleanSetting("Coords", true));
-    private final SliderSetting pulseSpeed = add(new SliderSetting("Speed", 1, 0, 5, 0.1));
+    private final SliderSetting pulseSpeed = add(new SliderSetting("PulseSpeed", 1, 0, 5, 0.1));
     private final SliderSetting pulseCounter = add(new SliderSetting("Counter", 10, 1, 50));
     public HUD() {
         super("HUD", Category.Client);

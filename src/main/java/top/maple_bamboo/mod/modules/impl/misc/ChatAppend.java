@@ -20,7 +20,7 @@ public class ChatAppend extends Module {
 		if (nullCheck() || event.isCancelled() || AutoQueue.inQueue) return;
 		String message = event.message;
 
-		if (message.startsWith("/") || message.startsWith("!") || message.endsWith(this.message.getValue())) {
+		if (message.startsWith("/") || message.endsWith(this.message.getValue())) {
 			return;
 		}
 		String suffix = this.message.getValue();
