@@ -23,11 +23,6 @@ public class AutoWalk extends Module {
     }
 
     @Override
-    public void onLogout() {
-        disable();
-    }
-
-    @Override
     public void onUpdate() {
         if (mode.is(Mode.Forward)) {
             mc.options.forwardKey.setPressed(true);
