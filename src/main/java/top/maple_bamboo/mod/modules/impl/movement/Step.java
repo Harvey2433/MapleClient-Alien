@@ -3,7 +3,10 @@ package top.maple_bamboo.mod.modules.impl.movement;
 import top.maple_bamboo.MapleClientMain;
 import top.maple_bamboo.api.events.eventbus.EventHandler;
 import top.maple_bamboo.api.events.impl.UpdateWalkingPlayerEvent;
+import top.maple_bamboo.api.utils.entity.MovementUtil;
 import top.maple_bamboo.mod.modules.Module;
+import top.maple_bamboo.mod.modules.impl.combat.SelfTrap;
+import top.maple_bamboo.mod.modules.impl.combat.Surround;
 import top.maple_bamboo.mod.modules.settings.impl.BooleanSetting;
 import top.maple_bamboo.mod.modules.settings.impl.EnumSetting;
 import top.maple_bamboo.mod.modules.settings.impl.SliderSetting;
@@ -46,7 +49,14 @@ public class Step extends Module {
 	}
 
 	boolean timer;
-
+	@Override
+	public void onUpdate() {
+		if (pathingPause.getValue() && sneakingPause.getValue() && mc.player.isSneaking() || inBlockPause.getValue() && MapleClientMain.PLAYER.insideBlock || mc.player.isInLava() || mc.player.isTouchingWater() || inWebPause.getValue() && MapleClientMain.PLAYER.isInWeb(mc.player) || !mc.player.isOnGround() || onlyMoving.getValue() && !MovementUtil.isMoving() || surroundPause.getValue() && (Surround.INSTANCE.isOn() || SelfTrap.INSTANCE.isOn())) {
+			mc.player.setStepHeight(0.6f);
+			return;
+		}
+		mc.player.setStepHeight(height.getValueFloat());
+	}
 	int packets = 0;
 
 	@EventHandler
