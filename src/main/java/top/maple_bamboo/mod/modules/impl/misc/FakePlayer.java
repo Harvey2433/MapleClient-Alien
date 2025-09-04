@@ -36,7 +36,7 @@ public class FakePlayer extends Module {
 		INSTANCE = this;
 	}
 
-	private final StringSetting name = add(new StringSetting("Name", "0ay"));
+	private final StringSetting name = add(new StringSetting("Name", "FakePlayer"));
 	private final BooleanSetting damage = add(new BooleanSetting("Damage", true));
 	private final BooleanSetting autoTotem = add(new BooleanSetting("AutoTotem", true));
 	public static OtherClientPlayerEntity fakePlayer;
